@@ -1,0 +1,12 @@
+{
+  "name": "cordova-plugin-tcvim",
+  "version": "1.0.0",
+  "cordova": {
+    "id": "cordova-plugin-tcvim",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "description": "IM VoIP plugin"
+}

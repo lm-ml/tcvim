@@ -1,10 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="TcvIM" version="0.0.1"
-        xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-tcvim" version="0.0.1"
+        xmlns="http://apache.org/cordova/ns/plugins/1.0" >
     <name>TcvIM</name>
-    <js-module name="TcvIM" src="www/TcvIM.js">
-        <clobbers target="cordova.plugins.TcvIM"/>
+
+
+    <engines>
+        <engine name="cordova" version=">=3.5.0"/>
+    </engines>
+
+    <js-module name="FirstToast" src="www/TcvIM.js">
+        <clobbers target="FirstToast"/>
     </js-module>
 
     <platform name="android">

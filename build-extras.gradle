@@ -9,6 +9,8 @@ ext.postBuildExtras = {
             exclude 'META-INF/DEPENDENCIES'
         }
         defaultConfig {
+            minSdkVersion 14
+            targetSdkVersion 23
             multiDexEnabled true
         }
     }

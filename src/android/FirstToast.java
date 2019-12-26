@@ -37,8 +37,12 @@ public class FirstToast extends CordovaPlugin {
         if ("initNIMClient".equals(action)) {
             String account = args.getString(0);
             String token = args.getString(1);
-            this.initNIMClient(account, token);
-            this.registerAVChatIncomingCallObserver(true);
+
+            //Toast.makeText(cordova.getActivity(), account, Toast.LENGTH_SHORT).show();
+            Toast.makeText(cordova.getActivity(), token, Toast.LENGTH_SHORT).show();
+
+ /*           this.initNIMClient(account, token);
+            this.registerAVChatIncomingCallObserver(true);*/
             return true;
         }
         if ("logoutNIMClient".equals(action)) {

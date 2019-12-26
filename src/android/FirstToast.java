@@ -88,9 +88,6 @@ public class FirstToast extends CordovaPlugin {
         config.ledARGB = Color.GREEN;
         config.ledOnMs = 1000;
         config.ledOffMs = 1500;
-        // 通知铃声的uri字符串
-        config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
-        options.statusBarNotificationConfig = config;
         return options;
     }
 

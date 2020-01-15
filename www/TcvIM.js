@@ -1,13 +1,24 @@
-
 var exec = require('cordova/exec');
 
 var PLUGIN_NAME = 'FirstToast';
 
-exports.toast = function (arg0, success, error) {
+var FirstToast = {
 
-    exec(success, error, PLUGIN_NAME, "toast", [arg0]);
+    toast: function (args, cb) {
+        exec(cb, null, PLUGIN_NAME, "toast", [args]);
+    },
 
-    exec(success, error, PLUGIN_NAME, "initNIMClient", [arg0]);
+    initNIMClient: function (param, successCb, errorCb) {
+        exec(successCb, errorCb, PLUGIN_NAME, 'initNIMClient', [param]);
+    },
 
-    exec(success, error, PLUGIN_NAME, "logoutNIMClient", [arg0]);
+    registerObserver: function (successCb, errorCb) {
+        exec(successCb, errorCb, PLUGIN_NAME, 'registerObserver', []);
+    },
+
+    logoutNIMClient: function (param, cb) {
+        exec(cb, null, PLUGIN_NAME, 'logoutNIMClient', [param]);
+    }
 };
+
+module.exports = FirstToast;

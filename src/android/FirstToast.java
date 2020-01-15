@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -21,6 +22,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FirstToast extends CordovaPlugin {
     private CallbackContext mCallbackContext;
@@ -35,14 +37,28 @@ public class FirstToast extends CordovaPlugin {
             return true;
         }
         if ("initNIMClient".equals(action)) {
-            String account = args.getString(0);
-            String token = args.getString(1);
-
-            //Toast.makeText(cordova.getActivity(), account, Toast.LENGTH_SHORT).show();
-            Toast.makeText(cordova.getActivity(), token, Toast.LENGTH_SHORT).show();
-
- /*           this.initNIMClient(account, token);
-            this.registerAVChatIncomingCallObserver(true);*/
+            JSONObject loginIMU = args.getJSONObject(0);
+            String account = loginIMU.getString("account");
+            String token = loginIMU.getString("token");
+            try {
+                this.login(account, token);
+            } catch (Exception ex) {
+                String errorpMsg = ex.toString();
+                Toast.makeText(cordova.getActivity(), errorpMsg, Toast.LENGTH_SHORT).show();
+                callbackContext.error("初始化失败.....");
+            }
+            callbackContext.success("初始化成功.....");
+            return true;
+        }
+        if ("registerObserver".equals(action)) {
+            try {
+                this.registerAVChatIncomingCallObserver(true);
+            } catch (Exception ex) {
+                String errorMsg = ex.toString();
+                Toast.makeText(cordova.getActivity(), errorMsg, Toast.LENGTH_SHORT).show();
+                callbackContext.error("初始化通话监听失败.....");
+            }
+            callbackContext.success("初始化通话监听成功.....");
             return true;
         }
         if ("logoutNIMClient".equals(action)) {
@@ -53,30 +69,30 @@ public class FirstToast extends CordovaPlugin {
         return false;
     }
 
-
-    public void initNIMClient(String account, String token) {
-        Context context = cordova.getActivity().getApplicationContext();
+    private void login(String account, String token) {
         LoginInfo loginInfo = new LoginInfo(account, token);
-//        RequestCallback<LoginInfo> callback =
-//                new RequestCallback<LoginInfo>() {
-//                    @Override
-//                    public void onSuccess(LoginInfo loginInfo) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailed(int i) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onException(Throwable throwable) {
-//
-//                    }
-//                    // 可以在此保存LoginInfo到本地，下次启动APP做自动登录用
-//                };
-//        NIMClient.getService(AuthService.class).login(loginInfo)
-//                .setCallback(callback);
+        RequestCallback<LoginInfo> callback = new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+                Toast.makeText(cordova.getActivity(), "恭喜您登陆成功", Toast.LENGTH_SHORT).show();
+                initNIMClient(loginInfo);
+            }
+
+            @Override
+            public void onFailed(int code) {
+                Toast.makeText(cordova.getActivity(), "Failed:" + code, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+            }
+        };
+        NIMClient.getService(AuthService.class).login(loginInfo).setCallback(callback);
+    }
+
+
+    public void initNIMClient(LoginInfo loginInfo) {
+        Context context = cordova.getActivity().getApplicationContext();
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         NIMClient.init(context, loginInfo, options());
     }
